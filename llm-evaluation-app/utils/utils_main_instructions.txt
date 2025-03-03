@@ -1,0 +1,21 @@
+# Utils Module Dependencies
+
+## Key Definitions
+1A1: processing.py
+1A2: comparison.py
+1A3: config.py
+
+## File-Level Dependencies
+X 1A1 1A2 1A3
+1A1 = o n < # processing.py depends on config.py
+1A2 = n o n # comparison.py has no internal dependencies
+1A3 = n n o # config.py has no internal dependencies
+
+## External Module Dependencies
+- processing.py uses external libraries: boto3, PIL, base64, json, requests
+- comparison.py uses external libraries: re
+- config.py exports configuration variables used by processing.py
+
+## Notes
+- processing.py imports configuration from config.py
+- All files are called by test modules (tracked in tests mini-tracker)

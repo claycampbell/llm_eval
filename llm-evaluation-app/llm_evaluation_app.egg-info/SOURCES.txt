@@ -1,0 +1,16 @@
+README.md
+setup.py
+llm_evaluation_app.egg-info/PKG-INFO
+llm_evaluation_app.egg-info/SOURCES.txt
+llm_evaluation_app.egg-info/dependency_links.txt
+llm_evaluation_app.egg-info/requires.txt
+llm_evaluation_app.egg-info/top_level.txt
+tests/__init__.py
+tests/conftest.py
+tests/utils/__init__.py
+tests/utils/test_comparison.py
+tests/utils/test_processing.py
+utils/__init__.py
+utils/comparison.py
+utils/config.py
+utils/processing.py

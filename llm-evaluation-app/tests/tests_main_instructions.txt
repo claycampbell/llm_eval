@@ -1,0 +1,24 @@
+# Tests Module Dependencies
+
+## Key Definitions
+1B1: utils/test_comparison.py
+1B2: utils/test_processing.py
+1A1: utils/processing.py
+1A2: utils/comparison.py
+
+## File-Level Dependencies
+X 1B1 1B2 1A1 1A2
+1B1 = o n n < # test_comparison.py depends on comparison.py
+1B2 = n o < n # test_processing.py depends on processing.py
+1A1 = n > o n # processing.py is used by test_processing.py
+1A2 = > n n o # comparison.py is used by test_comparison.py
+
+## External Module Dependencies
+- All test files use pytest framework
+- test_processing.py uses: PIL, base64, json, BytesIO, unittest.mock
+- test_comparison.py has no additional external dependencies
+
+## Notes
+- Each test file is paired with its corresponding implementation file
+- Test files verify both success and error cases
+- Mock AWS Bedrock client used in test_processing.py

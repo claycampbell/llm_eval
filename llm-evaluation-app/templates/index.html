@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Document Evaluation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+        }
+        .match {
+            color: green;
+        }
+        .no-match {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>LLM Document Evaluation</h1>
+    
+    <form id="uploadForm">
+        <div class="form-group">
+            <label>Document:</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Prompt (optional):</label>
+            <textarea id="prompt" name="prompt" placeholder="Default: Extract text exactly as it appears in this image."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Ground Truth:</label>
+            <textarea id="ground_truth" name="ground_truth" required placeholder="Enter the expected text output"></textarea>
+        </div>
+        
+        <button type="submit">Evaluate</button>
+    </form>
+    
+    <div id="result" class="result">
+        <h2>Results</h2>
+        <div>
+            <strong>Extracted Text:</strong>
+            <pre id="extractedText"></pre>
+        </div>
+        <div>
+            <strong>Normalized Extracted:</strong>
+            <pre id="normalizedExtracted"></pre>
+        </div>
+        <div>
+            <strong>Normalized Ground Truth:</strong>
+            <pre id="normalizedTruth"></pre>
+        </div>
+        <div>
+            <strong>Match Result:</strong>
+            <span id="matchResult"></span>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('file', document.getElementById('file').files[0]);
+            formData.append('prompt', document.getElementById('prompt').value);
+            formData.append('ground_truth', document.getElementById('ground_truth').value);
+            
+            try {
+                const response = await fetch('/evaluate', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                document.getElementById('extractedText').textContent = data.extracted_text;
+                document.getElementById('normalizedExtracted').textContent = data.normalized_extracted;
+                document.getElementById('normalizedTruth').textContent = data.normalized_truth;
+                document.getElementById('matchResult').textContent = data.matches ? 'MATCH' : 'NO MATCH';
+                document.getElementById('matchResult').className = data.matches ? 'match' : 'no-match';
+                document.getElementById('result').style.display = 'block';
+            } catch (err) {
+                alert('Error processing request: ' + err.message);
+            }
+        };
+    </script>
+</body>
+</html>
